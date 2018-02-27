@@ -224,6 +224,12 @@ class NewtonSolver(NonlinearSolver):
         system._vectors['residual']['linear'] *= -1.0
         system._linearize()
 
+        if system.pathname == "f_rhs.electric": 
+            for k in system._outputs.keys(): 
+                print("         foo: ", k, system._outputs[k])
+            for k in system._inputs.keys(): 
+                print("         bar: ", k, system._inputs[k])
+
         self.linear_solver.solve(['linear'], 'fwd')
 
         if self.linesearch:

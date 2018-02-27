@@ -394,6 +394,7 @@ class Problem(object):
         comm = self.comm
 
         # PETScVector is required for MPI
+        print("foobar", PETScVector, comm.size, vector_class)
         if PETScVector and comm.size > 1 and vector_class is not PETScVector:
             msg = ("The `vector_class` argument must be `PETScVector` when "
                    "running in parallel under MPI but '%s' was specified."
