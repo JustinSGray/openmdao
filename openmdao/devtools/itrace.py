@@ -4,6 +4,7 @@ import os
 import sys
 import re
 import argparse
+import warnings
 from contextlib import contextmanager
 from collections import defaultdict, OrderedDict
 
@@ -110,8 +111,11 @@ def _trace_return(frame, arg, stack, context):
         current_mem = mem_usage()
         last_mem = memory.pop()
         if current_mem > last_mem:
-            print("%s<-- %s (%6.3f KB)" % (indent, '.'.join((sname, funcname)),
-                                           (current_mem - last_mem) * 1024.))
+            delta = current_mem - last_mem
+            print("%s<-- %s (diff: %6.3f KB) (total: %6.3f MB)" %
+                  (indent, '.'.join((sname, funcname)), delta * 1024., current_mem))
+            for i in range(len(memory) - 1, -1, -1):
+                memory[i] += delta
     else:
         print("%s<-- %s" % (indent, '.'.join((sname, funcname))))
 
@@ -146,6 +150,9 @@ def _setup(options):
             do_ret = None
         if memory:
             memory = []
+            if mem_usage is None:
+                warnings.warn("Memory tracing requires the 'psutil' package.  "
+                              "Install it using 'pip install psutil'.")
         else:
             memory = None
         _trace_calls = _create_profile_callback(call_stack, _collect_methods(methods),
