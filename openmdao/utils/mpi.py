@@ -43,12 +43,13 @@ def _redirect_streams(to_fd):
         sys.stderr = os.fdopen(original_stderr_fd, 'wb', 0)
 
 
-def use_proc_files(working_dir=None):
+def use_proc_files():
     """
     Cause stdout/err from each MPI process to be written to [rank].out.
     """
     if MPI is not None:
-        if working_dir is None:
+        working_dir = os.environ.get('PROC_FILES_DIR')
+        if not working_dir:
             ofile = open("%d.out" % MPI.COMM_WORLD.rank, 'wb')
         else:
             if not os.path.isdir(working_dir):
@@ -201,4 +202,4 @@ else:
 
 
 if os.environ.get('USE_PROC_FILES') or os.environ.get('PROC_FILES_DIR'):
-    use_proc_files(os.environ.get('PROC_FILES_DIR'))
+    use_proc_files()
