@@ -12,6 +12,10 @@ from collections import defaultdict, OrderedDict
 from six import string_types
 from six.moves import cStringIO
 from numpy import ndarray
+try:
+    import objgraph
+except ImportError:
+    objgraph = None
 
 from openmdao.devtools.iprof_utils import _create_profile_callback, find_qualified_name, \
                                          func_group, _collect_methods, _Options, _setup_func_group,\
@@ -23,6 +27,7 @@ _registered = False  # prevents multiple atexit registrations
 
 MAXLINE = 80
 tab = '    '
+time0 = None
 
 addr_regex = re.compile(" at 0x[0-9a-fA-F]+")
 
@@ -56,6 +61,10 @@ def _trace_call(frame, arg, stack, context):
     """
     This is called after we have matched based on glob pattern and isinstance check.
     """
+    global time0
+    if time0 is None:
+        time0 = time.time()
+
     qual_cache, method_counts, class_counts, id2count, verbose, memory = context
 
     funcname = find_qualified_name(frame.f_code.co_filename,
@@ -98,6 +107,8 @@ def _trace_return(frame, arg, stack, context):
 
     This only happens if show_return is True when setup() is called.
     """
+    global time0
+
     qual_cache, method_counts, class_counts, id2count, verbose, memory = context
     funcname = find_qualified_name(frame.f_code.co_filename,
                                    frame.f_code.co_firstlineno, qual_cache)
@@ -116,15 +127,17 @@ def _trace_return(frame, arg, stack, context):
         last_mem = memory.pop()
         if current_mem > last_mem:
             delta = current_mem - last_mem
-            print("%s<-- %s (diff: %6.3f KB) (total: %6.3f MB) (time: %s)" %
-                  (indent, '.'.join((sname, funcname)), delta * 1024., current_mem, time.time()))
+            print("%s<-- %s (time: %8.5f) (total: %6.3f MB) (diff: %6.3f KB)" %
+                  (indent, '.'.join((sname, funcname)), time.time() - time0, current_mem,
+                   delta * 1024.))
 
             # add this delta to all callers so when they calculate their own delta, this
             # delta won't be included
             for i in range(len(memory) - 1, -1, -1):
                 memory[i] += delta
         else:
-            print("%s<-- %s" % (indent, '.'.join((sname, funcname))))
+            print("%s<-- %s (time: %8.5f) (total: %6.3f MB)" % (indent, '.'.join((sname, funcname)),
+                                                                time.time() - time0, current_mem))
     else:
         print("%s<-- %s" % (indent, '.'.join((sname, funcname))))
 
