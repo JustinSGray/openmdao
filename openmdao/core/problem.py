@@ -1257,8 +1257,8 @@ class Problem(object):
         oldwrt, oldof = wrt, of
         if not global_of:
             of = [prom2abs[name][0] for name in oldof]
-        if not global_wrt:
-            wrt = [prom2abs[name][0] for name in oldwrt]
+        #if not global_wrt:
+        #    wrt = [prom2abs[name][0] for name in oldwrt]
 
         owning_ranks = self.model._owning_rank['output']
 
@@ -1458,6 +1458,9 @@ class Problem(object):
                             doutputs._data[vs][:] = save_vec[vs]
                     else:
                         self._lin_sol_cache[ikey] = deepcopy(doutputs._data)
+                        for vs in doutputs._data:
+                            doutputs._data[vs][:] = 0.
+
 
                 model._solve_linear(lin_vec_names, mode, rel_systems)
 

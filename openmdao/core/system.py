@@ -1444,9 +1444,11 @@ class System(object):
             If None, perform a full transfer.
             If int, perform a partial transfer for linear Gauss--Seidel.
         """
+
         vec_inputs = self._vectors['input'][vec_name]
 
         if mode == 'fwd':
+
             if self._has_input_scaling:
                 vec_inputs.scale('norm')
                 self._transfers[vec_name][mode, isub].transfer(vec_inputs,
