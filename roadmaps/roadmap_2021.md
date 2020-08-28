@@ -176,7 +176,7 @@ While these issues are not significant for many current CFD based problems,
 we recognize the need to improve the performance to accommodate future 
 larger problems. 
 
-##1) Improved data storage and transfer scheme
+## 1) Improved data storage and transfer scheme
 ### Goal: 
 Using benchmark problems from ADFlow, Fun3D, and TACS as a guide, 
 reduce the memory usage and computational overhead of an 
@@ -194,7 +194,7 @@ and linear solver architectures. We anticipate some minor refactor of
 internal OpenMDAO APIs to handle this, but its not clear if that will 
 leak into component level APIs that affect users or not. 
 
-##2) Reduce ancillary data storage requirements
+## 2) Reduce ancillary data storage requirements
 ### Goal:
 Reduce memory allocation for scaling and unit-conversion vectors, 
 as well as any other ancillary vectors allocated to the same size as the data arrays. 
