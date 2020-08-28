@@ -18,9 +18,6 @@ can actually be accomplished in a single year!
 
 ## Summary of major progress from 2020 
 
-In 2019, we focused heavily on improving performance. 
-2020 saw much more effort going into improving APIs and general usability. 
-
 ### V3 release
 OpenMDAO V3 release was completed. Python 2 no longer supported. 
 As of the date of this document OpenMDAO V3.2 has been released. 
