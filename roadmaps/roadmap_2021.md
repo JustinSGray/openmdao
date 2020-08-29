@@ -86,7 +86,7 @@ less than 10 POEMS per year. He was wrong!
 As of the date of this document, there were 31 POEMS proposed in 2020. 
 
 
-#2021 main focus areas
+# 2021 main focus areas
 
 - Model visualization and data post processing
 
@@ -133,7 +133,7 @@ likely be built into a separate stand alone application.
 
 We have also considered a reduced functionality version of this feature 
 built into the OpenMDAO command line tool, based on matplotlib. 
-This liter version may be done instead of a stand alone tool or in addition to it. 
+This lighter version may be done instead of a stand alone tool or in addition to it. 
 
 
 # Building and OpenMDAO Training Course 
